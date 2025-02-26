@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: email-notification-service
+  kafka:
+    bootstrap-servers: localhost:29092,localhost:39092,localhost:49092
+    consumer:
+      group-id: salas-test-group
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "com.salas.sprindkafkaproducer.service.events"
+server:
+  port: 8081

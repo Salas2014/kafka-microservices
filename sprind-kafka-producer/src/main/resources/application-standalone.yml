@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: producer-kafka
+  kafka:
+      bootstrap-servers: localhost:29092,localhost:39092,localhost:49092
+      producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+        acks: -1
+        properties:
+          linger:
+            ms: 0
+          request:
+            timeout:
+              ms: 5000
+          enabled:
+            idempotence: true
+
+
+
+server:
+  address: 0.0.0.0
+  port: 8080
+
+#"172.24.0.7:29092,172.24.0.5:39092,172.24.0.6:49092"

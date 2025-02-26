@@ -1,0 +1,14 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+###
+
+POST localhost:8080/product
+Content-Type: application/json
+
+{
+  "title": "Hello new message",
+  "price": "13132",
+  "quantity": "test2"
+}
