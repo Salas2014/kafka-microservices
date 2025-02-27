@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
-import org.springframework.kafka.listener.BackOffHandler;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
@@ -53,17 +52,17 @@ public class KafkaConsumerConfig {
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, ProductCreatedEvent>
     kafkaListenerContainerFactory(KafkaTemplate<String, Object> kafkaTemplate) {
+        var deadLetterPublishingRecoverer = new DeadLetterPublishingRecoverer(kafkaTemplate);
+        var fixedBackOff = new FixedBackOff(3000, 3);
 
-        DefaultErrorHandler defaultErrorHandler = new DefaultErrorHandler(new DeadLetterPublishingRecoverer(
-                kafkaTemplate), new FixedBackOff(3000, 3));
+        var defaultErrorHandler = new DefaultErrorHandler(deadLetterPublishingRecoverer, fixedBackOff);
         defaultErrorHandler.addNotRetryableExceptions(NonRetryebleExeception.class);
         defaultErrorHandler.addRetryableExceptions(RetryebleExeception.class);
 
-        ConcurrentKafkaListenerContainerFactory<String, ProductCreatedEvent> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
-
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, ProductCreatedEvent>();
         factory.setConsumerFactory(consumerFactory());
         factory.setCommonErrorHandler(defaultErrorHandler);
+
         return factory;
     }
 
@@ -79,5 +78,7 @@ public class KafkaConsumerConfig {
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory<>(config);
-    };
+    }
+
+    ;
 }
