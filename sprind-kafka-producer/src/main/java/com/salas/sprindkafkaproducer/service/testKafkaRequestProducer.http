@@ -8,7 +8,7 @@ POST localhost:8080/product
 Content-Type: application/json
 
 {
-  "title": "Hello new message",
+  "title": "New Message from event",
   "price": "13132",
   "quantity": "test2"
 }

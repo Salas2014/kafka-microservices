@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/email-notification-service/pom.xml" />
         <option value="$PROJECT_DIR$/core-module/pom.xml" />
         <option value="$PROJECT_DIR$/common/pom.xml" />
+        <option value="$PROJECT_DIR$/mockservice/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

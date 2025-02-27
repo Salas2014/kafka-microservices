@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="mockservice" />
         <module name="email-notification-service" />
         <module name="common" />
         <module name="sprind-kafka-producer" />
@@ -20,6 +21,7 @@
       <module name="common" options="-parameters" />
       <module name="core-module" options="-parameters" />
       <module name="email-notification-service" options="-parameters" />
+      <module name="mockservice" options="-parameters" />
       <module name="sprind-kafka-producer" options="-parameters" />
     </option>
   </component>

@@ -1,6 +1,8 @@
 package com.salas.emailnotificationservice.config;
 
 import com.salas.common.ProductCreatedEvent;
+import com.salas.emailnotificationservice.exseption.NonRetryebleExeception;
+import com.salas.emailnotificationservice.exseption.RetryebleExeception;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -11,11 +13,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
+import org.springframework.kafka.listener.BackOffHandler;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +54,10 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, ProductCreatedEvent>
     kafkaListenerContainerFactory(KafkaTemplate<String, Object> kafkaTemplate) {
 
-        DefaultErrorHandler defaultErrorHandler = new DefaultErrorHandler(new DeadLetterPublishingRecoverer(kafkaTemplate));
+        DefaultErrorHandler defaultErrorHandler = new DefaultErrorHandler(new DeadLetterPublishingRecoverer(
+                kafkaTemplate), new FixedBackOff(3000, 3));
+        defaultErrorHandler.addNotRetryableExceptions(NonRetryebleExeception.class);
+        defaultErrorHandler.addRetryableExceptions(RetryebleExeception.class);
 
         ConcurrentKafkaListenerContainerFactory<String, ProductCreatedEvent> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
