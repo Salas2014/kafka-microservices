@@ -40,13 +40,14 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, String.join(",", bootstrapServers));
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         props.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, JsonDeserializer.class);
 
         props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
-        return new DefaultKafkaConsumerFactory<>(
-                props, new StringDeserializer(), new ErrorHandlingDeserializer<>(new JsonDeserializer<>(ProductCreatedEvent.class))
-        );
+        var handlingDeserializer = new ErrorHandlingDeserializer<>(new JsonDeserializer<>(ProductCreatedEvent.class));
+
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), handlingDeserializer);
     }
 
     @Bean
@@ -80,5 +81,4 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaProducerFactory<>(config);
     }
 
-    ;
 }

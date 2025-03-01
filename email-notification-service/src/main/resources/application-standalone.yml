@@ -1,4 +1,15 @@
 spring:
+  datasource:
+    username: salas
+    password: password
+    url: jdbc:postgresql://localhost:5432/kafka-db-integrate
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
   application:
     name: email-notification-service
   kafka:

@@ -1,0 +1,10 @@
+name: postgres-micro
+services:
+  postgres-db-integrate-with-kafka:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: salas
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: kafka-db-integrate

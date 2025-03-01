@@ -2,6 +2,7 @@ package com.salas.sprindkafkaproducer.service;
 
 import com.salas.common.ProductCreatedEvent;
 import com.salas.sprindkafkaproducer.service.dto.CreateProductDto;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -27,11 +28,12 @@ public class ProductService implements IProductService {
         // TODO save to db
         String productId = UUID.randomUUID().toString();
         ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent(
-                productId, dto.getTitle(), dto.getPrice(), dto.getQuantity()
-        );
+                productId, dto.getTitle(), dto.getPrice(), dto.getQuantity());
 
-        CompletableFuture<SendResult<String, ProductCreatedEvent>> completableFutureEvents
-                = kafkaTemplate.send(TOPIC_NAME, productId, productCreatedEvent);
+        var record = new ProducerRecord<>(TOPIC_NAME, productId, productCreatedEvent);
+        record.headers().add("messageId", UUID.randomUUID().toString().getBytes());
+
+        CompletableFuture<SendResult<String, ProductCreatedEvent>> completableFutureEvents = kafkaTemplate.send(record);
 
         completableFutureEvents.whenComplete((event, exception) -> {
             if (exception != null) {
