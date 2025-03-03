@@ -1,4 +1,4 @@
-package com.salas.emailnotificationservice.config;
+package com.salas.sprindkafkaproducer.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -25,7 +25,15 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<String> createProduct(@RequestBody CreateProductDto dto) {
-        String productId = productService.createProduct(dto);
+        String productId = null;
+
+        try {
+            productId = productService.createProduct(dto);
+        }catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(productId);
     }
 

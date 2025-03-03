@@ -44,6 +44,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.salas</groupId>
             <artifactId>common</artifactId>
             <version>0.0.1-SNAPSHOT</version>

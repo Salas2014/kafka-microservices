@@ -1,10 +1,10 @@
-package com.salas.emailnotificationservice.handlers;
+package com.salas.sprindkafkaproducer.handlers;
 
 import com.salas.common.ProductCreatedEvent;
-import com.salas.emailnotificationservice.exseption.NonRetryebleExeception;
-import com.salas.emailnotificationservice.exseption.RetryebleExeception;
-import com.salas.emailnotificationservice.percistence.ProcessedEventEntity;
-import com.salas.emailnotificationservice.percistence.ProcessedEventsRepository;
+import com.salas.sprindkafkaproducer.exseption.NonRetryebleExeception;
+import com.salas.sprindkafkaproducer.exseption.RetryebleExeception;
+import com.salas.sprindkafkaproducer.percistence.ProcessedEventEntity;
+import com.salas.sprindkafkaproducer.percistence.ProcessedEventsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;

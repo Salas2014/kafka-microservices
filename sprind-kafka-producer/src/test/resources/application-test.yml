@@ -1,8 +1,5 @@
 spring:
-  application:
-    name: producer-kafka
   kafka:
-    bootstrap-servers: localhost:29092,localhost:39092,localhost:49092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -15,11 +12,16 @@ spring:
             ms: 5000
         enabled:
           idempotence: true
+    consumer:
+      group-id: salas-test-group
+      properties:
+          json:
+            trusted:
+              packages: "com.salas.common"
+      auto-offset-reset: earliest
 
 
-
-server:
-  address: 0.0.0.0
-  port: 8080
-
-#"172.24.0.7:29092,172.24.0.5:39092,172.24.0.6:49092"
+created:
+  events:
+    topic:
+      name: product-crated-events-topic

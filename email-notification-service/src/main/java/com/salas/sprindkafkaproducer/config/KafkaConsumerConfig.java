@@ -1,8 +1,8 @@
-package com.salas.emailnotificationservice.config;
+package com.salas.sprindkafkaproducer.config;
 
 import com.salas.common.ProductCreatedEvent;
-import com.salas.emailnotificationservice.exseption.NonRetryebleExeception;
-import com.salas.emailnotificationservice.exseption.RetryebleExeception;
+import com.salas.sprindkafkaproducer.exseption.NonRetryebleExeception;
+import com.salas.sprindkafkaproducer.exseption.RetryebleExeception;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

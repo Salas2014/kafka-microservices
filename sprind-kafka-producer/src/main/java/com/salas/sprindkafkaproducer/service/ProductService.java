@@ -10,7 +10,7 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class ProductService implements IProductService {
@@ -24,7 +24,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public String createProduct(CreateProductDto dto) {
+    public String createProduct(CreateProductDto dto) throws ExecutionException, InterruptedException {
         // TODO save to db
         String productId = UUID.randomUUID().toString();
         ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent(
@@ -33,18 +33,13 @@ public class ProductService implements IProductService {
         var record = new ProducerRecord<>(TOPIC_NAME, productId, productCreatedEvent);
         record.headers().add("messageId", UUID.randomUUID().toString().getBytes());
 
-        CompletableFuture<SendResult<String, ProductCreatedEvent>> completableFutureEvents = kafkaTemplate.send(record);
+        SendResult<String, ProductCreatedEvent> event = kafkaTemplate.send(record).get();
 
-        completableFutureEvents.whenComplete((event, exception) -> {
-            if (exception != null) {
-                LOGGER.info("Failed to send message: {}", exception.getMessage());
-            } else {
-                LOGGER.info("Message sent successfully: {}", event.getRecordMetadata());
-                LOGGER.info("Topic: {}", event.getRecordMetadata().topic());
-                LOGGER.info("Partition: {}", event.getRecordMetadata().partition());
-                LOGGER.info("Offset: {}", event.getRecordMetadata().offset());
-            }
-        });
+        LOGGER.info("Message sent successfully: {}", event.getRecordMetadata());
+        LOGGER.info("Topic: {}", event.getRecordMetadata().topic());
+        LOGGER.info("Partition: {}", event.getRecordMetadata().partition());
+        LOGGER.info("Offset: {}", event.getRecordMetadata().offset());
+
 
         LOGGER.info("Result: {}", productId);
         return productId;

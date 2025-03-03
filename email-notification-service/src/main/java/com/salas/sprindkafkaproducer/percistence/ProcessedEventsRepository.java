@@ -1,4 +1,4 @@
-package com.salas.emailnotificationservice.percistence;
+package com.salas.sprindkafkaproducer.percistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.salas.emailnotificationservice.percistence;
+package com.salas.sprindkafkaproducer.percistence;
 
 import jakarta.persistence.*;
 

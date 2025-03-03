@@ -1,4 +1,4 @@
-package com.salas.emailnotificationservice.exseption;
+package com.salas.sprindkafkaproducer.exseption;
 
 public class RetryebleExeception extends RuntimeException {
     public RetryebleExeception(String message) {
