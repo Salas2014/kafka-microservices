@@ -40,7 +40,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ActiveProfiles("test")
 @EmbeddedKafka(partitions = 3, count = 3, controlledShutdown = true)
 @SpringBootTest(
-        properties = "spring.kafka.producer.bootstrap-servers=${spring.embedded.kafka.brokers}")
+        properties = "spring.kafka.producer.bootstrap-servers=${spring.embedded.kafka.brokers}"
+)
 public class ProductServiceIntegrationTest {
 
     @Autowired
@@ -74,17 +75,12 @@ public class ProductServiceIntegrationTest {
 
     @Test
     void testCreateProduct_whenValidProductDetails_successfullySendKafkaMessage() throws ExecutionException, InterruptedException {
-
         String title = "Samsung";
         String price = "500";
         String quantity = "10";
-
-        CreateProductDto createProductDto = new CreateProductDto(
-                title, price, quantity
-        );
+        CreateProductDto createProductDto = new CreateProductDto(title, price, quantity);
 
         productService.createProduct(createProductDto);
-
         ConsumerRecord<String, ProductCreatedEvent> consumerRecord = records.poll(3000, TimeUnit.MILLISECONDS);
         assertNotNull(consumerRecord);
         assertNotNull(consumerRecord.key());
@@ -101,7 +97,6 @@ public class ProductServiceIntegrationTest {
     }
 
     private Map<String, Object> getConsumerProperties() {
-
         return Map.of(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, embeddedKafkaBroker.getBrokersAsString(),
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class,

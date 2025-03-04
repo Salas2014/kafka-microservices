@@ -21,5 +21,6 @@ spring:
           json:
             trusted:
               packages: "com.salas.common"
+      auto-offset-reset: earliest
 server:
   port: 8081

@@ -33,6 +33,8 @@ public class KafkaConsumerConfig {
     private String groupId;
     @Value("${spring.kafka.consumer.properties.spring.json.trusted.packages}")
     private String trustedPackage;
+    @Value("${spring.kafka.consumer.auto-offset-reset}")
+    private String autoOffsetReset;
 
     @Bean
     public ConsumerFactory<String, ProductCreatedEvent> consumerFactory() {
@@ -46,6 +48,7 @@ public class KafkaConsumerConfig {
 
         props.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackage);
         var handlingDeserializer = new ErrorHandlingDeserializer<>(new JsonDeserializer<>(ProductCreatedEvent.class));
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
 
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), handlingDeserializer);
     }
